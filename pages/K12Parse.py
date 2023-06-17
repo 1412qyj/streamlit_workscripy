@@ -42,6 +42,10 @@ def plot_dataframe(df: pd.DataFrame, column):
     
     st.line_chart(df[column])
 
+def desc_dataframe(df: pd.DataFrame, column):
+    st.markdown(f'**Current: {column}**')
+    st.write(df[column].describe().to_dict())
+
 
 st.title('K12Parse')
 
@@ -62,7 +66,7 @@ if new_file:
             st.info('暂不支持 txt 格式, 请等待升级 ')
     
     column_select = st.sidebar.selectbox('当前操作的列名', st.session_state.columns)
-    options = st.sidebar.selectbox('当前的操作', ('Hex2Dec','Mul','Plot', 'Diff'))
+    options = st.sidebar.selectbox('当前的操作', ('Hex2Dec','Mul','Plot', 'Diff', 'Desc'))
     mulfactor = ''
     if options == 'Mul':
         mulfactor = st.sidebar.text_input('请输入 Mul 系数')
@@ -82,6 +86,8 @@ if new_file:
             diff_dataframe(st.session_state.table_data, column_select)
         elif options == 'Plot':
             plot_dataframe(st.session_state.table_data, column_select)
+        elif options == 'Desc':
+            desc_dataframe(st.session_state.table_data, column_select)
         else:
             pass
     st.write(st.session_state.table_data.head(10))
